@@ -1,21 +1,24 @@
-import React from "react";
+import React, { Component } from "react";
 import Task from "../task";
 
 import "./task-list.css";
 
-const TaskList = ({ tasks, onSwitch, onDelete }) => {
-  const taskElements = tasks.map((item) => {
-    return (
-      <Task
-        {...item}
-        key={item.id}
-        onSwitch={() => onSwitch(item.id)}
-        onDelete={() => onDelete(item.id)}
-      />
-    );
-  });
+export default class TaskList extends Component {
+  render() {
+    const { tasks, onComplete, onDeleted, onEditStart, onEditEnd } = this.props;
+    const taskElements = tasks.map((task) => {
+      return (
+        <Task
+          {...task}
+          key={task.id}
+          onComplete={() => onComplete(task.id)}
+          onDeleted={() => onDeleted(task.id)}
+          onEditStart={() => onEditStart(task.id)}
+          onEditEnd={(...args) => onEditEnd(...args)}
+        />
+      );
+    });
 
-  return <ul className="todo-list">{taskElements}</ul>;
-};
-
-export default TaskList;
+    return <ul className="todo-list">{taskElements}</ul>;
+  }
+}

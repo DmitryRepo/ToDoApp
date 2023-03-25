@@ -6,39 +6,62 @@ import Footer from "../footer";
 import "./app.css";
 
 export default class App extends Component {
+  maxId = 100;
+
   state = {
-    tasks: [
-      {
-        description: "Completed task",
-        createTime: new Date(),
-        condition: "completed",
-        id: 1,
-      },
-      {
-        description: "Editing task",
-        createTime: new Date(),
-        condition: "editing",
-        id: 2,
-      },
-      {
-        description: "Active task",
-        createTime: new Date(),
-        condition: null,
-        id: 3,
-      },
+    tasks: [],
+    activeFilter: "all",
+    filters: [
+      { label: "All", param: "all", active: true },
+      { label: "Active", param: "active", active: false },
+      { label: "Completed", param: "completed", active: false },
     ],
   };
 
-  onSwitchTaskHandler = (id) => {
-    const newTaskMass = [...this.state.tasks];
-    const indexTask = newTaskMass.findIndex((element) => element.id === id);
-    const conditionTask = newTaskMass[indexTask].condition;
+  createTask = (label) => {
+    return {
+      description: label,
+      createTime: new Date(),
+      completed: false,
+      editing: false,
+      id: this.maxId++,
+    };
+  };
 
-    newTaskMass[indexTask].condition =
-      conditionTask !== "completed" ? "completed" : null;
+  toggleProperty(arr, id, propName) {
+    const index = arr.findIndex((element) => element.id === id);
+    const oldItem = arr[index];
+    const newItem = { ...oldItem, [propName]: !oldItem[propName] };
+    const newtodoData = [
+      ...arr.slice(0, index),
+      newItem,
+      ...arr.slice(index + 1, arr.length),
+    ];
+    return newtodoData;
+  }
 
-    this.setState(() => ({
-      tasks: newTaskMass,
+  getFilteredTasks = () => {
+    const { activeFilter, tasks } = this.state;
+    if (activeFilter === "all") {
+      return tasks;
+    } else if (activeFilter === "completed") {
+      return tasks.filter((task) => task.completed);
+    } else if (activeFilter === "active") {
+      return tasks.filter((task) => !task.completed);
+    }
+  };
+
+  onTaskCreate = (label) => {
+    this.setState((state) => {
+      const tasks = [...state.tasks].reverse();
+      tasks.push(this.createTask(label));
+      return { tasks: tasks.reverse() };
+    });
+  };
+
+  onCompleteTaskHandler = (id) => {
+    this.setState((state) => ({
+      tasks: this.toggleProperty(state.tasks, id, "completed"),
     }));
   };
 
@@ -48,22 +71,84 @@ export default class App extends Component {
     }));
   };
 
+  editStartTaskHandler = (id) => {
+    this.setState((state) => {
+      const tasks = state.tasks.map((task) => {
+        return {
+          ...task,
+          editing: false,
+        };
+      });
+      return {
+        tasks: this.toggleProperty(tasks, id, "editing"),
+      };
+    });
+  };
+
+  editEndTaskHandler = (value, id) => {
+    this.setState((state) => {
+      const tasks = state.tasks.map((task) => {
+        return task.id !== id
+          ? task
+          : {
+              ...task,
+              editing: false,
+              description: value,
+            };
+      });
+      return {
+        tasks,
+      };
+    });
+  };
+
+  onClearActive = () => {
+    this.setState((state) => {
+      return {
+        tasks: state.tasks.filter((task) => !task.completed),
+      };
+    });
+  };
+
+  filterHandler = (param) => {
+    this.setState((state) => {
+      const filters = state.filters.map((filter) => {
+        return {
+          ...filter,
+          active: filter.param === param,
+        };
+      });
+      return {
+        filters,
+        activeFilter: param,
+      };
+    });
+  };
   render() {
-    const { tasks } = this.state;
+    const { tasks, filters } = this.state;
+    const filteredTasks = this.getFilteredTasks();
+    const completeCount = tasks.filter((task) => !task.completed).length;
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm />
+          <NewTaskForm onTaskCreate={this.onTaskCreate} />
         </header>
         <section className="main">
           <TaskList
-            tasks={tasks}
-            onSwitch={this.onSwitchTaskHandler}
-            onDelete={this.onDeleteTaskHandler}
+            tasks={filteredTasks}
+            onComplete={this.onCompleteTaskHandler}
+            onDeleted={this.onDeleteTaskHandler}
+            onEditStart={this.editStartTaskHandler}
+            onEditEnd={this.editEndTaskHandler}
           />
         </section>
-        <Footer />
+        <Footer
+          completeCount={completeCount}
+          filters={filters}
+          onFilter={this.filterHandler}
+          onClearActive={this.onClearActive}
+        />
       </section>
     );
   }
