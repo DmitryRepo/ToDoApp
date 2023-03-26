@@ -124,10 +124,11 @@ export default class App extends Component {
       };
     });
   };
+
   render() {
     const { tasks, filters } = this.state;
     const filteredTasks = this.getFilteredTasks();
-    const completeCount = tasks.filter((task) => !task.completed).length;
+    const countTask = tasks.filter((task) => !task.completed).length;
     return (
       <section className="todoapp">
         <header className="header">
@@ -144,7 +145,7 @@ export default class App extends Component {
           />
         </section>
         <Footer
-          completeCount={completeCount}
+          countTask={countTask}
           filters={filters}
           onFilter={this.filterHandler}
           onClearActive={this.onClearActive}
