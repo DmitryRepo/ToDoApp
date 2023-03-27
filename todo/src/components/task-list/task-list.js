@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import Task from "../task";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import "./task-list.css";
+import Task from '../task';
+
+import './task-list.css';
 
 export default class TaskList extends Component {
-  
   static defaultProps = {
     tasks: [],
     onComplete: () => {},

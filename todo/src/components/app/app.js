@@ -1,20 +1,21 @@
-import React, { Component } from "react";
-import NewTaskForm from "../new-task-form";
-import TaskList from "../task-list";
-import Footer from "../footer";
+import React, { Component } from 'react';
 
-import "./app.css";
+import NewTaskForm from '../new-task-form';
+import TaskList from '../task-list';
+import Footer from '../footer';
+
+import './app.css';
 
 export default class App extends Component {
   maxId = 100;
 
   state = {
     tasks: [],
-    activeFilter: "all",
+    activeFilter: 'all',
     filters: [
-      { label: "All", param: "all", active: true },
-      { label: "Active", param: "active", active: false },
-      { label: "Completed", param: "completed", active: false },
+      { label: 'All', param: 'all', active: true },
+      { label: 'Active', param: 'active', active: false },
+      { label: 'Completed', param: 'completed', active: false },
     ],
   };
 
@@ -32,21 +33,17 @@ export default class App extends Component {
     const index = arr.findIndex((element) => element.id === id);
     const oldItem = arr[index];
     const newItem = { ...oldItem, [propName]: !oldItem[propName] };
-    const newtodoData = [
-      ...arr.slice(0, index),
-      newItem,
-      ...arr.slice(index + 1, arr.length),
-    ];
+    const newtodoData = [...arr.slice(0, index), newItem, ...arr.slice(index + 1, arr.length)];
     return newtodoData;
   }
 
   getFilteredTasks = () => {
     const { activeFilter, tasks } = this.state;
-    if (activeFilter === "all") {
+    if (activeFilter === 'all') {
       return tasks;
-    } else if (activeFilter === "completed") {
+    } else if (activeFilter === 'completed') {
       return tasks.filter((task) => task.completed);
-    } else if (activeFilter === "active") {
+    } else if (activeFilter === 'active') {
       return tasks.filter((task) => !task.completed);
     }
   };
@@ -61,7 +58,7 @@ export default class App extends Component {
 
   onCompleteTaskHandler = (id) => {
     this.setState((state) => ({
-      tasks: this.toggleProperty(state.tasks, id, "completed"),
+      tasks: this.toggleProperty(state.tasks, id, 'completed'),
     }));
   };
 
@@ -80,7 +77,7 @@ export default class App extends Component {
         };
       });
       return {
-        tasks: this.toggleProperty(tasks, id, "editing"),
+        tasks: this.toggleProperty(tasks, id, 'editing'),
       };
     });
   };
@@ -88,13 +85,15 @@ export default class App extends Component {
   editEndTaskHandler = (value, id) => {
     this.setState((state) => {
       const tasks = state.tasks.map((task) => {
-        return task.id !== id
-          ? task
-          : {
-              ...task,
-              editing: false,
-              description: value,
-            };
+        if (task.id !== id) {
+          return task;
+        } else {
+          return {
+            ...task,
+            editing: false,
+            description: value,
+          };
+        }
       });
       return {
         tasks,

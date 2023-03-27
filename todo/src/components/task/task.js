@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { formatDistanceToNow } from "date-fns";
+import React, { Component } from 'react';
+import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
 
-import "./task.css";
+import './task.css';
 
 export default class Task extends Component {
   static defaultProps = {
@@ -61,21 +61,10 @@ export default class Task extends Component {
   };
 
   render() {
-    const {
-      completed,
-      editing,
-      id,
-      description,
-      createTime,
-      onComplete,
-      onEditStart,
-      onDeleted,
-    } = this.props;
+    const { completed, editing, id, description, createTime, onComplete, onEditStart, onDeleted } =
+      this.props;
 
-    const classNames = [
-      completed ? "completed" : "",
-      editing ? "editing" : "",
-    ].join(" ");
+    const classNames = [completed ? 'completed' : '', editing ? 'editing' : ''].join(' ');
 
     return (
       <li className={classNames} key={id}>

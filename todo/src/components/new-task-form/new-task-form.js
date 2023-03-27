@@ -1,23 +1,22 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import "./new-task-form.css";
+import './new-task-form.css';
 
 export default class NewTaskForm extends Component {
-
   static propTypes = {
     onTaskCreate: PropTypes.func.isRequired,
   };
-  
+
   state = {
-    label: "",
+    label: '',
   };
 
   submitHandler = (event) => {
     event.preventDefault();
     this.props.onTaskCreate(this.state.label);
     this.setState({
-      label: "",
+      label: '',
     });
   };
 

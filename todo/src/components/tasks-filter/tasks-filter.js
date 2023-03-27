@@ -1,10 +1,9 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import "./tasks-filter.css";
+import './tasks-filter.css';
 
 export default class TaskFilter extends Component {
-
   static propTypes = {
     filters: PropTypes.array.isRequired,
     onFilter: PropTypes.func.isRequired,
@@ -17,7 +16,7 @@ export default class TaskFilter extends Component {
         <li key={item.param}>
           <button
             type="button"
-            className={item.active ? "selected" : ""}
+            className={item.active ? 'selected' : ''}
             onClick={() => onFilter(item.param)}
           >
             {item.label}
