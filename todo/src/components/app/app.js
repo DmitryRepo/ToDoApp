@@ -26,6 +26,7 @@ export default class App extends Component {
       completed: false,
       editing: false,
       id: this.maxId++,
+      timerCountData: 0,
     };
   };
 
@@ -124,6 +125,19 @@ export default class App extends Component {
     });
   };
 
+  setTimerData = (id, time) => {
+    this.setState(({ tasks }) => {
+      const newArr = [...tasks].map((item) => {
+        const newItem = item;
+        if (item.id === id) newItem.timerCountData = time;
+        return newItem;
+      });
+      return {
+        tasks: newArr,
+      };
+    });
+  };
+
   render() {
     const { tasks, filters } = this.state;
     const filteredTasks = this.getFilteredTasks();
@@ -141,6 +155,7 @@ export default class App extends Component {
             onDeleted={this.onDeleteTaskHandler}
             onEditStart={this.editStartTaskHandler}
             onEditEnd={this.editEndTaskHandler}
+            setTimerData={this.setTimerData}
           />
         </section>
         <Footer

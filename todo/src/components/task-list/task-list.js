@@ -23,7 +23,7 @@ export default class TaskList extends Component {
   };
 
   render() {
-    const { tasks, onComplete, onDeleted, onEditStart, onEditEnd } = this.props;
+    const { tasks, onComplete, onDeleted, onEditStart, onEditEnd, setTimerData } = this.props;
     const taskElements = tasks.map((task) => {
       return (
         <Task
@@ -33,6 +33,7 @@ export default class TaskList extends Component {
           onDeleted={() => onDeleted(task.id)}
           onEditStart={() => onEditStart(task.id)}
           onEditEnd={(...args) => onEditEnd(...args)}
+          setTimerData={setTimerData}
         />
       );
     });

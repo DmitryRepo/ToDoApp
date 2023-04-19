@@ -29,6 +29,8 @@ export default class Task extends Component {
 
   state = {
     taskLabel: this.props.description,
+    timer: false,
+    timerCount: 0,
   };
 
   onTaskEdit = (event) => {
@@ -60,11 +62,39 @@ export default class Task extends Component {
     }
   };
 
+  setTime = () => {
+    const { timerCount } = this.state;
+    const { id, setTimerData } = this.props;
+    const newTimerCount = timerCount + 1;
+    setTimerData(id, newTimerCount);
+    return this.setState({ timerCount: newTimerCount });
+  };
+
+  onTimerPlay = () => {
+    const { timer } = this.state;
+    if (!timer) {
+      this.setState({ timer: true });
+      this.timerStart = setInterval(this.setTime, 1000);
+    }
+  };
+
+  onTimerPause = () => {
+    clearInterval(this.timerStart);
+    this.setState({ timer: false });
+  };
+
+  transformTime = (time) => {
+    const min = `${Math.trunc(time / 60)}`.padStart(2, '0');
+    const sec = `${time - min * 60}`.padStart(2, '0');
+    return `${min}:${sec}`;
+  };
+
   render() {
     const { completed, editing, id, description, createTime, onComplete, onEditStart, onDeleted } =
       this.props;
 
     const classNames = [completed ? 'completed' : '', editing ? 'editing' : ''].join(' ');
+    const { timerCount } = this.state;
 
     return (
       <li className={classNames} key={id}>
@@ -78,6 +108,11 @@ export default class Task extends Component {
           />
           <label htmlFor={`${id}__check`}>
             <span className="description">{description}</span>
+            <div className="timer-block">
+              <button className="icon-play" type="button" onClick={this.onTimerPlay}></button>
+              <button className="icon-pause" type="button" onClick={this.onTimerPause}></button>
+              <span className="timer-indicator">{this.transformTime(timerCount)}</span>
+            </div>
             <span className="created">{formatDistanceToNow(createTime)}</span>
           </label>
           <button className="icon icon-edit" onClick={onEditStart}></button>
