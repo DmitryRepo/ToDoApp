@@ -30,7 +30,7 @@ export default class Task extends Component {
   state = {
     taskLabel: this.props.description,
     timer: false,
-    timerCount: 0,
+    timerCount: this.props.timerCountData,
   };
 
   onTaskEdit = (event) => {
@@ -46,6 +46,14 @@ export default class Task extends Component {
     onEditEnd(taskLabel, id);
   };
 
+  onEscape(event) {
+    if (event.code === 'Escape') {
+      const { onEditEnd, id, description } = this.props;
+      this.setState({ taskLabel: description });
+      onEditEnd(description, id);
+    }
+  }
+
   editField = () => {
     const { editing } = this.props;
     if (editing) {
@@ -56,6 +64,9 @@ export default class Task extends Component {
             className="edit"
             value={this.state.taskLabel}
             onChange={this.onTaskEdit}
+            onKeyDown={(event) => {
+              this.onEscape(event);
+            }}
           />
         </form>
       );
@@ -65,7 +76,7 @@ export default class Task extends Component {
   setTime = () => {
     const { timerCount } = this.state;
     const { id, setTimerData } = this.props;
-    const newTimerCount = timerCount + 1;
+    const newTimerCount = timerCount - 1;
     setTimerData(id, newTimerCount);
     return this.setState({ timerCount: newTimerCount });
   };
@@ -92,7 +103,6 @@ export default class Task extends Component {
   render() {
     const { completed, editing, id, description, createTime, onComplete, onEditStart, onDeleted } =
       this.props;
-
     const classNames = [completed ? 'completed' : '', editing ? 'editing' : ''].join(' ');
     const { timerCount } = this.state;
 
@@ -109,7 +119,11 @@ export default class Task extends Component {
           <label htmlFor={`${id}__check`}>
             <span className="description">{description}</span>
             <div className="timer-block">
-              <button className="icon-play" type="button" onClick={this.onTimerPlay}></button>
+              <button
+                className="icon-play"
+                type="button"
+                onClick={!completed ? this.onTimerPlay : () => {}}
+              ></button>
               <button className="icon-pause" type="button" onClick={this.onTimerPause}></button>
               <span className="timer-indicator">{this.transformTime(timerCount)}</span>
             </div>

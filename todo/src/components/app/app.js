@@ -7,8 +7,6 @@ import Footer from '../footer';
 import './app.css';
 
 export default class App extends Component {
-  maxId = 100;
-
   state = {
     tasks: [],
     activeFilter: 'all',
@@ -19,14 +17,14 @@ export default class App extends Component {
     ],
   };
 
-  createTask = (label) => {
+  createTask = (id, label, time) => {
     return {
       description: label,
       createTime: new Date(),
       completed: false,
       editing: false,
-      id: this.maxId++,
-      timerCountData: 0,
+      id: id,
+      timerCountData: time,
     };
   };
 
@@ -49,11 +47,11 @@ export default class App extends Component {
     }
   };
 
-  onTaskCreate = (label) => {
+  onTaskCreate = (id, label, time) => {
     this.setState((state) => {
       const tasks = [...state.tasks].reverse();
-      tasks.push(this.createTask(label));
-      return { tasks: tasks.reverse() };
+      tasks.push(this.createTask(id, label, time));
+      return { tasks: tasks };
     });
   };
 
