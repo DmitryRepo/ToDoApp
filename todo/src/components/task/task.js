@@ -78,6 +78,10 @@ export default class Task extends Component {
     const { id, setTimerData } = this.props;
     const newTimerCount = timerCount - 1;
     setTimerData(id, newTimerCount);
+    if (newTimerCount <= 0) {
+      clearInterval(this.timerStart);
+      this.setState({ timer: false });
+    }
     return this.setState({ timerCount: newTimerCount });
   };
 

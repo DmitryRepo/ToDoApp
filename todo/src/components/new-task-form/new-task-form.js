@@ -64,6 +64,7 @@ export default class NewTaskForm extends Component {
           onChange={this.changeHandlerMin}
           type="number"
           value={this.state.minute}
+          min="0"
         />
         <input
           className="new-todo-form__timer"
@@ -71,6 +72,8 @@ export default class NewTaskForm extends Component {
           onChange={this.changeHandlerSec}
           type="number"
           value={this.state.seconds}
+          min="0"
+          max="59"
         />
         <button type="submit"></button>
       </form>
