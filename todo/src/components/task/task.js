@@ -86,8 +86,8 @@ export default class Task extends Component {
   };
 
   onTimerPlay = () => {
-    const { timer } = this.state;
-    if (!timer) {
+    const { timer, timerCount } = this.state;
+    if (!timer && timerCount > 0) {
       this.setState({ timer: true });
       this.timerStart = setInterval(this.setTime, 1000);
     }
