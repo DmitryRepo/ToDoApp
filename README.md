@@ -1,2 +1,2 @@
 Link:
-https://todoapp-dvgorchakov-gmailcom.vercel.app/ - todo с таймером
+https://vercel-rho-ashen.vercel.app/ - todo с таймером
