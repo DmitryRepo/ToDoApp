@@ -67,6 +67,7 @@
 .todo-list li label .created {
 	font-size: 13px;
 	color: gray;
+	padding-left: 0.5rem;
 }
 
 .todo-list li label .description {
@@ -127,30 +128,35 @@
 }
 .todo-list li .icon-pause,
 .todo-list li .icon-play {
+	position: relative;
 	font-size: 18px;
 	width: 18px;
 	height: 18px;
-	display: flex;
-    justify-content: center;
-    align-items: center;
 }
-.todo-list li .icon-play {
-	font-size: 15px;
+.todo-list li .icon-pause{
+	margin-bottom: 0.3rem;
+}
+.todo-list li .icon-play{
+	margin-bottom: 0.15rem;
 }
 
 .icon-pause:after {
 	content: '⏸';
+	
 }
 .icon-play:after {
-	content: '▶';
-	color: #cc9a9a;
+	content: '▶';	
 }
 .timer-block{
 	display: flex;
 	justify-content: space-between;
-	width: 20%;
+	width: 23%;
 	font-size: 13px;
-	align-items: center;
+	align-items:center;
+	padding: auto;
 }
-
+.timer-indicator{
+    padding-left: 0.5rem;
+	margin-bottom: -0.2rem;
+}
 
